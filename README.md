@@ -27,8 +27,6 @@ The TRS layer is placed between the retriever and generator as a safety filter t
 
 ## Quick Start
 
-## Quick Start
-
 ```bash
 git clone git@github.com:hansutapak/trust-rag.git
 cd trust-rag
