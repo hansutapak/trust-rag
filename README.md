@@ -8,7 +8,7 @@ Prevents context poisoning in real‑time RAG by mathematically scoring every re
 
 ## Architecture
 
-`Open Data BCN → ETL (NGSI‑LD JSON) → ChromaDB → TRS Middleware → LLM (Gemini) → Answer + Explainability Panel`
+`Open Data BCN -> ETL (NGSI‑LD JSON) -> ChromaDB -> TRS Middleware -> LLM (Gemini) -> Answer`
 
 The TRS layer sits between the retriever and generator, acting as a safety filter that discards stale, contradictory, or low‑credibility data before generation.
 
