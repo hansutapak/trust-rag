@@ -1,4 +1,4 @@
-# trust-rag
+<h1 style="color:#EF476F;">trust-rag</h1>
 
 **Total Reliability Score (TRS) middleware for trustworthy Retrieval‑Augmented Generation in smart‑city Cyber‑Physical Systems.**
 
