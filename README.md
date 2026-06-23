@@ -40,7 +40,7 @@ python src/etl/convert.py
 # 2. Seed ChromaDB
 python set_up.py
 
-# 3. Run a query
+# 3. Run a query (LLM response)
 python main.py
 
 # 4. Inspect TRS scores
