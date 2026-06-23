@@ -27,10 +27,21 @@ The TRS layer is placed between the retriever and generator as a safety filter t
 
 ## Quick Start
 
+## Quick Start
+
 ```bash
 git clone git@github.com:hansutapak/trust-rag.git
 cd trust-rag
 uv sync
-python set_up.py          # seeds ChromaDB from Open Data BCN
-python main.py             # runs a query
-python tests/debug_trs.py  # shows TRS scores and component breakdown
+
+# 1. Generate NGSI‑LD JSON from raw CSVs (included)
+python src/etl/convert.py
+
+# 2. Seed ChromaDB
+python set_up.py
+
+# 3. Run a query
+python main.py
+
+# 4. Inspect TRS scores
+python tests/debug_trs.py
