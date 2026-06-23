@@ -1,8 +1,8 @@
-<h1 style="color:#EF476F;">trust-rag</h1>
+#Trust-rag
 
-**Total Reliability Score (TRS) middleware for trustworthy Retrieval‑Augmented Generation in smart‑city Cyber‑Physical Systems.**
+**The Total Reliability Score (TRS) is a type of middleware for reliable, trustworthy Retrieval-Augmented Generation (RAG) in Cyber-Physical Systems (CPSs) for smart cities.**
 
-Prevents context poisoning in real‑time RAG by mathematically scoring every retrieved IoT chunk on **semantic similarity × exponential recency decay × source credibility**, with spatial conflict resolution.
+Prevents context poisoning in real-time RAG by mathematically weighing each retrieved IoT chunk by its degree of semantic similarity, exponential recency decay and source credibility, with spatial conflict resolution.
 
 ---
 
@@ -10,7 +10,7 @@ Prevents context poisoning in real‑time RAG by mathematically scoring every re
 
 `Open Data BCN -> ETL (NGSI‑LD JSON) -> ChromaDB -> TRS Middleware -> LLM (Gemini) -> Answer`
 
-The TRS layer sits between the retriever and generator, acting as a safety filter that discards stale, contradictory, or low‑credibility data before generation.
+The TRS layer is placed between the retriever and generator as a safety filter that filters out low credibility data as well as contradictory and stale data that may be fed into the generator.
 
 ---
 
