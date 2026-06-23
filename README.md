@@ -1,4 +1,4 @@
-#Trust-rag
+# Trust-rag
 
 **The Total Reliability Score (TRS) is a type of middleware for reliable, trustworthy Retrieval-Augmented Generation (RAG) in Cyber-Physical Systems (CPSs) for smart cities.**
 
