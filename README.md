@@ -49,7 +49,7 @@ uv run python -m src.ingestion.kafka_consumer
 # 6. Check the database
 uv run python tools/inspect_db.py
 
-# 7. Run a query (LLM response) - must relate to the stored Barcelona sensor data
+# 7. Run a query (LLM response) - must be relate to the stored Barcelona sensor data
 python main.py
 
 # 8. Inspect TRS scores
