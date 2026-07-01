@@ -32,22 +32,33 @@ git clone git@github.com:hansutapak/trust-rag.git
 cd trust-rag
 uv sync
 
-# 1. Generate NGSI‑LD JSON from raw CSVs (included)
-python src/etl/convert.py
+# 1. Start Colima (macOS Docker runtime)
+colima start
 
-# 2. Seed ChromaDB
-python set_up.py
+# 2. Start Kafka
+docker-compose up -d
 
-# 3. Run a query (LLM response)
+# 3. Run the live sensor simulator (Terminal 2)
+uv run python -m src.ingestion.sensor_simulation
+
+# 4. Run the Kafka consumer (Terminal 3)
+uv run python -m src.ingestion.kafka_consumer
+
+# 5. Let data accumulate for 2‑3 minutes, then stop both (Ctrl+C)
+
+# 6. Check the database
+uv run python tools/inspect_db.py
+
+# 7. Run a query (LLM response)
 python main.py
 
-# 4. Inspect TRS scores
+# 8. Inspect TRS scores
 python tests/debug_trs.py
 
-# 5. verify adaptive decay
+# 9. Verify adaptive decay
 python tests/test_adaptive_decay.py
 
-# 6. verify Bayesian credibility
+# 10. Verify Bayesian credibility
 python tests/test_bayesian_credibility.py
 
 
