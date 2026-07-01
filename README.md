@@ -43,3 +43,11 @@ python main.py
 
 # 4. Inspect TRS scores
 python tests/debug_trs.py
+
+# 5. verify adaptive decay
+python tests/test_adaptive_decay.py
+
+# 6. verify Bayesian credibility
+python tests/test_bayesian_credibility.py
+
+
