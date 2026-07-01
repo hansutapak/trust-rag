@@ -44,12 +44,12 @@ uv run python -m src.ingestion.sensor_simulation
 # 4. Run the Kafka consumer (Terminal 3)
 uv run python -m src.ingestion.kafka_consumer
 
-# 5. Let data accumulate for 2‑3 minutes, then stop both (Ctrl+C)
+# 5. Let data get storedfor 2‑3 minutes, then stop both Terminal 2 and 3 (Ctrl+C)
 
 # 6. Check the database
 uv run python tools/inspect_db.py
 
-# 7. Run a query (LLM response)
+# 7. Run a query (LLM response) - must relate to the stored Barcelona sensor data
 python main.py
 
 # 8. Inspect TRS scores
