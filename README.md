@@ -19,7 +19,7 @@ The TRS layer is placed between the retriever and generator as a safety filter t
 - **Ingestion:** Apache Kafka (simulated live streams)  
 - **Storage:** ChromaDB (vector store)  
 - **Embeddings:** FastEmbed (`BAAI/bge-small-en-v1.5`) – local, zero‑cost  
-- **TRS Engine:** Python (exponential decay, Bayesian credibility, Z‑score spatial conflict)  
+- **TRS Engine:** Python (adaptive per-source decay rates, Bayesian credibility, Z‑score spatial conflict)  
 - **Generation:** Gemini (via LangChain)  
 - **Evaluation:** RAGAS + QPP‑GenRE (nDCG, RR)  
 
