@@ -1,7 +1,8 @@
 import json
 import time
 import random
-from datetime import datetime
+from faker import Faker
+from datetime import datetime, timezone
 from kafka import KafkaProducer
 
 producer = KafkaProducer(
@@ -11,22 +12,44 @@ producer = KafkaProducer(
 
 SENSORS = [
     {
-        "sensor_id": "EDI-AQ-001",
-        "location": "Princes Street North",
+        "sensor_id": "BCN-AQ-001",
+        "location": "Eixample",
         "source_type": "government_sensor",
         "metric": "AQI",
+        "lat": 41.389,
+        "lon": 2.165,
     },
     {
-        "sensor_id": "EDI-TR-001",
-        "location": "Princes Street Junction",
+        "sensor_id": "BCN-TR-001",
+        "location": "Ciutat Vella",
         "source_type": "council_approved",
         "metric": "traffic_density",
+        "lat": 41.380,
+        "lon": 2.190,
     },
     {
-        "sensor_id": "EDI-WE-001",
-        "location": "Princes Street",
+        "sensor_id": "BCN-WE-001",
+        "location": "Nou Barris",
         "source_type": "met_office",
         "metric": "temperature",
+        "lat": 41.440,
+        "lon": 2.181,
+    },
+    {
+        "sensor_id": "BCN-SM-001",
+        "location": "Eixample",
+        "source_type": "citizen_device",
+        "metric": "social_report",
+        "lat": 41.389,
+        "lon": 2.165,
+    },
+    {
+        "sensor_id": "BCN-WB-001",
+        "location": "Ciutat Vella",
+        "source_type": "commercial_iot",
+        "metric": "bin_fill",
+        "lat": 41.380,
+        "lon": 2.190,
     },
 ]
 
@@ -36,13 +59,30 @@ TOPIC = "smart_city_sensors"
 def simulate():
     while True:
         for sensor in SENSORS:
+            # generate reading
+            if sensor["metric"] == "social_report":
+                fake = Faker()
+                reading = f"Ctizen report from {sensor['location']}: {fake.sentence()}"
+            else:
+                reading = round(random.uniform(30, 80), 2)
+
+            # NGSI-LD format
             message = {
-                "sensor_id": sensor["sensor_id"],
-                "location": sensor["location"],
-                "source_type": sensor["source_type"],
-                "metric": sensor["metric"],
-                "reading": round(random.uniform(30, 80), 2),
-                "timestamp": datetime.now().isoformat(),
+                "id": sensor["sensor_id"],
+                "type": "sensor",
+                "location": {
+                    "type": "Point",
+                    "coordinates": [sensor["lon"], sensor["lat"]],
+                },
+                "dateObserved": datetime.now(timezone.utc).isoformat(),
+                "source": {
+                    "dataset": "live_sensors",
+                    "sensorType": sensor["source_type"],
+                },
+                "attributes": {
+                    "metric": sensor["metric"],
+                    "reading": reading,
+                },
             }
             producer.send(TOPIC, value=message)
             print(f"Sent: {message}")

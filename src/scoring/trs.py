@@ -1,17 +1,68 @@
 import math
 from datetime import datetime, timezone
 
-from src.config import DECAY_RATES
+from src.config import ADAPTIVE_DECAY_RATES, DECAY_RATES, INITIAL_BAYESIAN_PRIORS
+
+# In‑memory Bayesian counts (will be initialised lazily)
+_bayesian_counts = {}
+
+
+def get_bayesian_credibility(source_type, sensor_id=None):
+    """
+    Return the credibility score for a sensor using Bayesian updating.
+    Currently uses static priors; counts can be updated dynamically
+    via update_bayesian_credibility() when sensor accuracy is evaluated.
+    """
+    # Build the key – if we have a specific sensor, track per‑sensor;
+    # otherwise fall back to the source‑type prior.
+    key = sensor_id if sensor_id else source_type
+
+    if key not in _bayesian_counts:
+        # Initialise from static prior
+        alpha, beta = INITIAL_BAYESIAN_PRIORS.get(source_type, (50, 50))
+        _bayesian_counts[key] = {"alpha": alpha, "beta": beta}
+
+    counts = _bayesian_counts[key]
+    total = counts["alpha"] + counts["beta"]
+    return counts["alpha"] / total if total > 0 else 0.5
+
+
+def update_bayesian_credibility(source_type, sensor_id, accurate=True):
+    """
+    Update the Bayesian counts for a sensor.
+    Call this when a sensor reading has been evaluated (e.g., via LLM‑as‑judge,
+    or by checking against spatial consensus).
+    - accurate=True  → increment alpha
+    - accurate=False → increment beta
+    """
+    key = sensor_id if sensor_id else source_type
+    if key not in _bayesian_counts:
+        alpha, beta = INITIAL_BAYESIAN_PRIORS.get(source_type, (50, 50))
+        _bayesian_counts[key] = {"alpha": alpha, "beta": beta}
+
+    if accurate:
+        _bayesian_counts[key]["alpha"] += 1
+    else:
+        _bayesian_counts[key]["beta"] += 1
+
+
+def get_adaptive_decay_rate(entity_type, document_type, source_type):
+    """Pick the best decay rate: entity_type → source_type → generic fallback."""
+    if entity_type and entity_type in ADAPTIVE_DECAY_RATES:
+        return ADAPTIVE_DECAY_RATES[entity_type]
+    if source_type and source_type in ADAPTIVE_DECAY_RATES:
+        return ADAPTIVE_DECAY_RATES[source_type]
+    return DECAY_RATES.get(document_type, DECAY_RATES["sensor"])
 
 
 def calculate_recency_score(timestamp_str, decay_rate=DECAY_RATES["sensor"]):
-    if decay_rate == 0.0:
-        return 1.0
-
     """
     Exponential decay based on the age of the data
     decay_rate controls how fast freshness drops
     """
+    if decay_rate == 0.0:
+        return 1.0
+
     chunk_time = datetime.fromisoformat(timestamp_str)
     # Make sure both datetimes are timezone-aware
     if chunk_time.tzinfo is None:
@@ -40,9 +91,13 @@ def rank_chunks_by_trs(chunks_with_scores):
 
     for chunk, semantic_score in chunks_with_scores:
         timestamp = chunk.metadata.get("timestamp", datetime.now().isoformat())
-        credibility = chunk.metadata.get("credibility", 0.5)
+        sensor_id = chunk.metadata.get("id", None)
         document_type = chunk.metadata.get("document_type", "sensor")
-        decay_rate = DECAY_RATES.get(document_type, DECAY_RATES["sensor"])
+        source_type = chunk.metadata.get("source_type", "government")
+        credibility = get_bayesian_credibility(source_type, sensor_id)
+        entity_type = chunk.metadata.get("entity_type", None)
+        decay_rate = get_adaptive_decay_rate(entity_type, document_type, source_type)
+
         trs = calculate_trs(semantic_score, timestamp, credibility, decay_rate)
         ranked.append((chunk, trs))
 

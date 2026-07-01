@@ -8,8 +8,6 @@ vectorstore = get_vectorstore()
 rag_chain = build_rag_chain(vectorstore)
 
 # run query
-response = rag_chain.invoke(
-    "Where is the climate shelter Casal de Barri La Cosa Nostra?"
-)
+response = rag_chain.invoke("What is the current AQI in Eixample?")
 print("TRS RAG Answer:")
 print(response)

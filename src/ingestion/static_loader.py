@@ -6,7 +6,6 @@ from datetime import datetime
 
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.embeddings import FastEmbedEmbeddings
 
 from src.config import (

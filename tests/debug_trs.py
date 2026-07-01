@@ -3,18 +3,22 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.config import DECAY_RATES
+from src.config import DECAY_RATES, RETRIEVED_K
 from src.generation.rag_chain import build_rag_chain, format_doc
 from src.ingestion.static_loader import get_vectorstore
-from src.scoring.trs import calculate_recency_score, rank_chunks_by_trs
+from src.scoring.trs import (
+    calculate_recency_score,
+    rank_chunks_by_trs,
+    get_adaptive_decay_rate,
+)
 
 
 def debug_trs():
     vectorstore = get_vectorstore()
-    query = "Casal de Barri in Nou Barris"
+    query = "What is the current AQI?"
 
     # 1. Raw Chroma distances
-    raw = vectorstore.similarity_search_with_score(query, k=5)
+    raw = vectorstore.similarity_search_with_score(query, k=RETRIEVED_K)
     print("RAW CHROMA DISTANCES (smaller = more similar)")
     for doc, dist in raw:
         print(
@@ -27,8 +31,10 @@ def debug_trs():
     for doc, trs in ranked:
         timestamp = doc.metadata.get("timestamp")
         credibility = doc.metadata.get("credibility", 0.5)
-        doc_type = doc.metadata.get("document_type", "sensor")
-        decay_rate = DECAY_RATES.get(doc_type, DECAY_RATES["sensor"])
+        document_type = doc.metadata.get("document_type", "sensor")
+        source_type = doc.metadata.get("source_type", "government")
+        entity_type = doc.metadata.get("entity_type", None)
+        decay_rate = get_adaptive_decay_rate(entity_type, source_type, document_type)
 
         recency = calculate_recency_score(timestamp, decay_rate)
         # similarity derived from TRS, recency, credibility
