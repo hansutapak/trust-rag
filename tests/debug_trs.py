@@ -15,7 +15,7 @@ from src.scoring.trs import (
 
 def debug_trs():
     vectorstore = get_vectorstore()
-    query = "What is the current AQI?"
+    query = "current AQI?"
 
     # 1. Raw Chroma distances
     raw = vectorstore.similarity_search_with_score(query, k=RETRIEVED_K)
@@ -26,7 +26,7 @@ def debug_trs():
         )
 
     # 2. TRS ranking with accurate component display
-    ranked = rank_chunks_by_trs(raw)
+    ranked = rank_chunks_by_trs(raw, vectorstore)
     print("\nTRS RANKING (similarity × recency × credibility = TRS)")
     for doc, trs in ranked:
         timestamp = doc.metadata.get("timestamp")

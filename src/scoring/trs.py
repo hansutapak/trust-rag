@@ -46,6 +46,90 @@ def update_bayesian_credibility(source_type, sensor_id, accurate=True):
         _bayesian_counts[key]["beta"] += 1
 
 
+# spatial conflict
+def apply_spatial_conflict_penalty(chunk, vectorstore, z_threshold=2.5):
+    """
+    Check if a numeric sensor reading is a spatial outlier compared
+    to nearby sensors of the same metric. If so, penalise the sensor's
+    Bayesian credibility and return a penalty multiplier (< 1.0).
+    Returns 1.0 if no conflict is detected.
+    """
+    numeric_metrics = {"AQI", "temperature", "traffic_density", "bin_fill"}
+    actual_metric = None
+    for m in numeric_metrics:
+        if m.lower() in chunk.page_content.lower():
+            actual_metric = m
+            break
+    if not actual_metric:
+        return 1.0
+
+    location = chunk.metadata.get("location", None)
+    chunk_id = chunk.metadata.get("id", None)
+    if not location:
+        return 1.0
+
+    # Find neighbors (exclude the current chunk)
+    neighbors = vectorstore.similarity_search(actual_metric, k=15)
+    neighbor_values = []
+    for nb in neighbors:
+        nb_id = nb.metadata.get("id")
+        if nb_id == chunk_id:
+            continue  # skip the chunk we are checking
+        nb_loc = nb.metadata.get("location")
+        if not nb_loc:
+            continue
+        lat_diff = abs(location[1] - nb_loc[1])
+        lon_diff = abs(location[0] - nb_loc[0])
+        if lat_diff < 0.01 and lon_diff < 0.01:
+            try:
+                parts = nb.page_content.split("|")
+                for part in parts:
+                    if actual_metric in part:
+                        val = float(part.split(":")[-1].strip().split()[0])
+                        neighbor_values.append(val)
+                        break
+            except (ValueError, IndexError):
+                continue
+
+    if len(neighbor_values) < 3:
+        return 1.0
+
+    mu = sum(neighbor_values) / len(neighbor_values)
+    variance = sum((v - mu) ** 2 for v in neighbor_values) / len(neighbor_values)
+    sigma = variance**0.5
+    if sigma == 0:
+        return 1.0
+
+    # Extract this chunk's value
+    try:
+        parts = chunk.page_content.split("|")
+        this_val = None
+        for part in parts:
+            if actual_metric in part:
+                this_val = float(part.split(":")[-1].strip().split()[0])
+                break
+        if this_val is None:
+            return 1.0
+    except (ValueError, IndexError):
+        return 1.0
+
+    z = (this_val - mu) / sigma
+
+    if abs(z) > z_threshold:
+        source_type = chunk.metadata.get("source_type", "government")
+        sensor_id = chunk.metadata.get("id", None)
+        update_bayesian_credibility(source_type, sensor_id, accurate=False)
+        penalty = max(0.1, 1.0 - (abs(z) - z_threshold) / 10)
+        return penalty
+
+    update_bayesian_credibility(
+        chunk.metadata.get("source_type", "government"),
+        chunk.metadata.get("id", None),
+        accurate=True,
+    )
+    return 1.0
+
+
 def get_adaptive_decay_rate(entity_type, document_type, source_type):
     """Pick the best decay rate: entity_type → source_type → generic fallback."""
     if entity_type and entity_type in ADAPTIVE_DECAY_RATES:
@@ -82,7 +166,7 @@ def calculate_trs(
     return round(trs, 4)
 
 
-def rank_chunks_by_trs(chunks_with_scores):
+def rank_chunks_by_trs(chunks_with_scores, vectorstore=None):
     """
     Takes retrieved chunks with semantic scores,
     calculates TRS for each, returns ranked list.
@@ -99,6 +183,9 @@ def rank_chunks_by_trs(chunks_with_scores):
         decay_rate = get_adaptive_decay_rate(entity_type, document_type, source_type)
 
         trs = calculate_trs(semantic_score, timestamp, credibility, decay_rate)
+        if vectorstore is not None:
+            penalty = apply_spatial_conflict_penalty(chunk, vectorstore)
+            trs = round(trs * penalty, 4)
         ranked.append((chunk, trs))
 
     # sort

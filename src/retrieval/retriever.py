@@ -11,7 +11,7 @@ def trs_retriever(vectorstore, query):
         return []
 
     # ranked
-    ranked = rank_chunks_by_trs(results_with_scores)
+    ranked = rank_chunks_by_trs(results_with_scores, vectorstore)
 
     # keep top 3 chunks only
     top_chunks = [chunk for chunk, trs in ranked[:TOP_K_CHUNKS]]
