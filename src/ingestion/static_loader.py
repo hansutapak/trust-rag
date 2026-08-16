@@ -5,8 +5,8 @@ import time
 from datetime import datetime
 
 from langchain_chroma import Chroma
-from langchain_core.documents import Document
 from langchain_community.embeddings import FastEmbedEmbeddings
+from langchain_core.documents import Document
 
 from src.config import (
     CHROMA_COLLECTION,
@@ -115,3 +115,7 @@ def load_json_data(max_per_file=None, batch_size=50, delay_seconds=60):
                 time.sleep(delay_seconds)
 
         print(f"✅ Total {entity_type} loaded: {total_loaded}")
+
+
+if __name__ == "__main__":
+    load_json_data(max_per_file=200, batch_size=50, delay_seconds=10)

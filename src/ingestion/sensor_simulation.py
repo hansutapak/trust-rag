@@ -1,8 +1,9 @@
 import json
-import time
 import random
+import time
+from datetime import UTC, datetime
+
 from faker import Faker
-from datetime import datetime, timezone
 from kafka import KafkaProducer
 
 producer = KafkaProducer(
@@ -68,21 +69,14 @@ def simulate():
 
             # NGSI-LD format
             message = {
-                "id": sensor["sensor_id"],
-                "type": "sensor",
-                "location": {
-                    "type": "Point",
-                    "coordinates": [sensor["lon"], sensor["lat"]],
-                },
-                "dateObserved": datetime.now(timezone.utc).isoformat(),
-                "source": {
-                    "dataset": "live_sensors",
-                    "sensorType": sensor["source_type"],
-                },
-                "attributes": {
-                    "metric": sensor["metric"],
-                    "reading": reading,
-                },
+                "sensor_id": sensor["sensor_id"],
+                "location_name": sensor["location"],
+                "source_type": sensor["source_type"],
+                "metric": sensor["metric"],
+                "reading": reading,
+                "timestamp": datetime.now(UTC).isoformat(),
+                "lat": sensor["lat"],
+                "lon": sensor["lon"],
             }
             producer.send(TOPIC, value=message)
             print(f"Sent: {message}")

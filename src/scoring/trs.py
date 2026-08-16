@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 from src.config import ADAPTIVE_DECAY_RATES, DECAY_RATES, INITIAL_BAYESIAN_PRIORS
 
-# In‑memory Bayesian counts (will be initialised lazily)
+# In-memory Bayesian counts (will be initialised lazily)
 _bayesian_counts = {}
 
 
@@ -13,8 +13,8 @@ def get_bayesian_credibility(source_type, sensor_id=None):
     Currently uses static priors; counts can be updated dynamically
     via update_bayesian_credibility() when sensor accuracy is evaluated.
     """
-    # Build the key – if we have a specific sensor, track per‑sensor;
-    # otherwise fall back to the source‑type prior.
+    # Build the key - if we have a specific sensor, track per-sensor;
+    # otherwise fall back to the source-type prior.
     key = sensor_id if sensor_id else source_type
 
     if key not in _bayesian_counts:
@@ -30,10 +30,10 @@ def get_bayesian_credibility(source_type, sensor_id=None):
 def update_bayesian_credibility(source_type, sensor_id, accurate=True):
     """
     Update the Bayesian counts for a sensor.
-    Call this when a sensor reading has been evaluated (e.g., via LLM‑as‑judge,
+    Call this when a sensor reading has been evaluated (e.g., via LLM-as-judge,
     or by checking against spatial consensus).
-    - accurate=True  → increment alpha
-    - accurate=False → increment beta
+    - accurate=True  -> increment alpha
+    - accurate=False -> increment beta
     """
     key = sensor_id if sensor_id else source_type
     if key not in _bayesian_counts:
@@ -131,7 +131,7 @@ def apply_spatial_conflict_penalty(chunk, vectorstore, z_threshold=2.5):
 
 
 def get_adaptive_decay_rate(entity_type, document_type, source_type):
-    """Pick the best decay rate: entity_type → source_type → generic fallback."""
+    """Pick the best decay rate: entity_type -> source_type -> generic fallback."""
     if entity_type and entity_type in ADAPTIVE_DECAY_RATES:
         return ADAPTIVE_DECAY_RATES[entity_type]
     if source_type and source_type in ADAPTIVE_DECAY_RATES:
@@ -160,7 +160,7 @@ def calculate_recency_score(timestamp_str, decay_rate=DECAY_RATES["sensor"]):
 def calculate_trs(
     semantic_score, timestamp_str, credibility, decay_rate=DECAY_RATES["sensor"]
 ):
-    similarity = 1 / (1 + semantic_score)
+    similarity = 1 - semantic_score
     recency = calculate_recency_score(timestamp_str, decay_rate)
     trs = similarity * recency * credibility
     return round(trs, 4)

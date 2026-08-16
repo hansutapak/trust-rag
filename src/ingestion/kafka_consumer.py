@@ -1,9 +1,12 @@
 import json
+
 from kafka import KafkaConsumer
 from langchain_chroma import Chroma
 from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_core.documents import Document
-from src.config import EMBEDDING_MODEL, CHROMA_COLLECTION, CHROMA_DIR, CREDIBILITY_RULES
+
+from src.config import CHROMA_COLLECTION, CHROMA_DIR, CREDIBILITY_RULES, EMBEDDING_MODEL
+from src.etl.normalize import normalize_raw_reading
 
 TOPIC = "smart_city_sensors"
 
@@ -26,9 +29,10 @@ def start_consumer():
 
     print("Consumer started. Waiting for messages...")
     for message in consumer:
-        data = message.value
+        raw = message.value
+        # Normalize the raw reading to NGSI‑LD format
+        data = normalize_raw_reading(raw)
 
-        # Extract ffields from NGSI-LD format
         sensor_id = data["id"]
         source_type = data["source"]["sensorType"]
         timestamp = data["dateObserved"]

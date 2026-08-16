@@ -1,10 +1,17 @@
+import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # model
-LLM_MODEL = "gemini-2.5-flash"
+LLM_MODEL = "gemini-3.1-flash-lite"
 EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+
+# model 2
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_BASE_URL = "https://api.groq.com/openai/v1"
+LLM_MODEL_GROQ = "qwen/qwen3.6-27b"
 
 # chromaDB
 CHROMA_COLLECTION = "smart_city"
@@ -19,13 +26,18 @@ ADAPTIVE_DECAY_RATES = {
     "GreenPoint": 0.0,
     # live sensor types (λ = 1 / shelf‑life in seconds)
     "citizen_device": 0.0083,  # T_stale = 120 s (2 min)
+    # "citizen_device": 0.00001,
     "council_approved": 0.0033,  # T_stale = 300 s (5 min)
+    # "council_approved": 0.00001,
     "commercial_iot": 0.0011,  # T_stale = 900 s (15 min)
+    # "commercial_iot": 0.00001,
     "government_sensor": 0.0006,  # T_stale = 1800 s (30 min)
+    # "government_sensor": 0.00001,
     "met_office": 0.0003,  # T_stale = 3600 s (1 h)
+    # "met_office": 0.00001,
 }
 TOP_K_CHUNKS = 3
-RETRIEVED_K = 10
+RETRIEVED_K = 100
 CHUNK_SIZE = 200
 CHUNK_OVERLAP = 50
 

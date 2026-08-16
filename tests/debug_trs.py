@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.config import DECAY_RATES, RETRIEVED_K
+from src.config import RETRIEVED_K
 from src.generation.rag_chain import build_rag_chain, format_doc
 from src.ingestion.static_loader import get_vectorstore
 from src.scoring.trs import (
@@ -34,7 +34,7 @@ def debug_trs():
         document_type = doc.metadata.get("document_type", "sensor")
         source_type = doc.metadata.get("source_type", "government")
         entity_type = doc.metadata.get("entity_type", None)
-        decay_rate = get_adaptive_decay_rate(entity_type, source_type, document_type)
+        decay_rate = get_adaptive_decay_rate(entity_type, document_type, source_type)
 
         recency = calculate_recency_score(timestamp, decay_rate)
         # similarity derived from TRS, recency, credibility

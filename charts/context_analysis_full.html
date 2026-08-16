@@ -1,0 +1,438 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { font-family: sans-serif; margin: 20px; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; }
+  th { background-color: #2c3e50; color: white; padding: 8px; text-align: left; position: sticky; top: 0; z-index: 10; }
+  td { border: 1px solid #ddd; padding: 6px; vertical-align: top; }
+  tr:nth-child(even) { background-color: #f9f9f9; }
+  .match-1 { background-color: #d4edda; font-weight: bold; color: #155724; }
+  .match-0 { background-color: #f8d7da; font-weight: bold; color: #721c24; }
+  .highlight-trs { background-color: #d1ecf1; }
+</style>
+</head>
+<body>
+<h2>📊 Context Analysis: What the LLM Received</h2>
+<p>This table shows the <strong>exact context</strong> sent to the LLM, the manual ground truth, and whether each pipeline matched it.</p>
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Query</th>
+      <th>Ground Truth</th>
+      <th>Baseline Context (Top 1)</th>
+      <th>Baseline Match</th>
+      <th>TRS Context (Top 1)</th>
+      <th>TRS Match</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td>1</td>
+      <td><strong>What is the current AQI in Eixample?</strong></td>
+      <td><code>75.05</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-001 | AQI: 75.18 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 75.05 | Location: 41.389, 2.165</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td><strong>What is the current AQI in Nou Barris?</strong></td>
+      <td><code>75.05</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-999 | AQI: 999 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 75.05 | Location: 41.389, 2.165</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td><strong>What is the current AQI in Sant Andreu?</strong></td>
+      <td><code>75.05</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-999 | AQI: 999 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 72.93 | Location: 41.389, 2.165</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td><strong>What is the current AQI in Sants-Montjuï...</strong></td>
+      <td><code>75.05</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-001 | AQI: 51.1 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 75.05 | Location: 41.389, 2.165</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td><strong>What is the current AQI in Ciutat Vella?</strong></td>
+      <td><code>75.05</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-999 | AQI: 999 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 75.05 | Location: 41.389, 2.165</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td><strong>What is the current AQI in Gràcia?</strong></td>
+      <td><code>75.05</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-001 | AQI: 75.18 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 75.05 | Location: 41.389, 2.165</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>7</td>
+      <td><strong>What is the current AQI in Sarrià?</strong></td>
+      <td><code>75.05</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-001 | AQI: 61.72 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 72.93 | Location: 41.389, 2.165</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>8</td>
+      <td><strong>What is the current AQI in Les Corts?</strong></td>
+      <td><code>75.05</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-001 | AQI: 52.25 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 48.17 | Location: 41.389, 2.165</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>9</td>
+      <td><strong>What is the current AQI in Horta?</strong></td>
+      <td><code>75.05</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-001 | AQI: 75.18 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 75.05 | Location: 41.389, 2.165</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>10</td>
+      <td><strong>What is the current AQI near Plaça Catal...</strong></td>
+      <td><code>517</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-999 | AQI: 999 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">Tree: 0003767AR | x_etrs89: 431696.256, y_etrs89: 4584145.233, tipus_element: ARBRE VIARI, espai_verd: Aragó, c. - Enamorats, c. - Dos de Maig, c., ad...</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>11</td>
+      <td><strong>What is the temperature in Eixample?</strong></td>
+      <td><code>49.05</code></td>
+      <td style="font-size: 10px;">sensor: BCN-SM-001 | social_report: Ctizen report from Eixample: By range draw beat its. | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-WE-001 | temperature: 49.05 | Location: 41.44, 2.181</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>12</td>
+      <td><strong>What is the temperature in Nou Barris ri...</strong></td>
+      <td><code>54.82</code></td>
+      <td style="font-size: 10px;">sensor: BCN-WE-001 | temperature: 76.91 | Location: 41.44, 2.181</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-WE-001 | temperature: 31.85 | Location: 41.44, 2.181</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>13</td>
+      <td><strong>What is the temperature in the Gothic Qu...</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">ClimateShelter: La Boutique del Peluquero | name: La Boutique del Peluquero, created: 2025-10-27T10:33:49.713253+01:00, addresses_road_id: 296202, add...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">ClimateShelter: La Boutique del Peluquero | name: La Boutique del Peluquero, created: 2025-10-27T10:33:49.713253+01:00, addresses_road_id: 296202, add...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>14</td>
+      <td><strong>What is the temperature in Sant Andreu?</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Centre Cívic Sant Andreu | name: Centre Cívic Sant Andreu, created: 1984-05-30T00:00:00+02:00, addresses_road_id: 296202, addresses_ro...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">ClimateShelter: Centre Cívic Sant Andreu | name: Centre Cívic Sant Andreu, created: 1984-05-30T00:00:00+02:00, addresses_road_id: 296202, addresses_ro...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>15</td>
+      <td><strong>What is the temperature in Sants-Montjuï...</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Casal de Gent Gran Cotxeres de Sants | name: Casal de Gent Gran Cotxeres de Sants, created: 1991-03-22T00:00:00+01:00, addresses_road_...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">ClimateShelter: Casal de Gent Gran Cotxeres de Sants | name: Casal de Gent Gran Cotxeres de Sants, created: 1991-03-22T00:00:00+01:00, addresses_road_...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>16</td>
+      <td><strong>What is the temperature in Ciutat Vella?</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Centre Esportiu Municipal Parc de la Ciutadella | name: Centre Esportiu Municipal Parc de la Ciutadella, created: 1993-02-22T00:00:00+...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">ClimateShelter: Centre Esportiu Municipal Parc de la Ciutadella | name: Centre Esportiu Municipal Parc de la Ciutadella, created: 1993-02-22T00:00:00+...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>17</td>
+      <td><strong>What is the temperature in Gràcia?</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Fundació Privada Festa Major de Gràcia | name: Fundació Privada Festa Major de Gràcia, created: 2004-06-18T13:43:05+02:00, addresses_r...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">ClimateShelter: Fundació Privada Festa Major de Gràcia | name: Fundació Privada Festa Major de Gràcia, created: 2004-06-18T13:43:05+02:00, addresses_r...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>18</td>
+      <td><strong>What is the temperature in Sarrià?</strong></td>
+      <td><code>54.82</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Jardins de Can Sentmenat | name: Jardins de Can Sentmenat, created: 1995-03-22T00:00:00+01:00, addresses_road_id: 058601, addresses_ro...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">Tree: 0007301AR | x_etrs89: 427672.283, y_etrs89: 4582634.288, tipus_element: ARBRE VIARI, espai_verd: Sarrià, Av. - Bori i Fonestà, c. - Can Ràbia, c...</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>19</td>
+      <td><strong>What is the temperature in Les Corts?</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Biblioteca Les Corts - Miquel Llongueras | name: Biblioteca Les Corts - Miquel Llongueras, created: 2000-10-10T00:00:00+02:00, address...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">ClimateShelter: Biblioteca Les Corts - Miquel Llongueras | name: Biblioteca Les Corts - Miquel Llongueras, created: 2000-10-10T00:00:00+02:00, address...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>20</td>
+      <td><strong>What is the temperature near Plaça Espan...</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Espai  amb Jocs d'Aigua a la Plaça de la Lluita per les Llibertats | name: Espai  amb Jocs d'Aigua a la Plaça de la Lluita per les Lli...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">ClimateShelter: Espai  amb Jocs d'Aigua a la Plaça de la Lluita per les Llibertats | name: Espai  amb Jocs d'Aigua a la Plaça de la Lluita per les Lli...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>21</td>
+      <td><strong>What is the traffic density in Eixample?</strong></td>
+      <td><code>69.81</code></td>
+      <td style="font-size: 10px;">sensor: BCN-TR-001 | traffic_density: 69.81 | Location: 41.38, 2.19</td>
+      <td class="match-1">1</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-TR-001 | traffic_density: 69.81 | Location: 41.38, 2.19</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>22</td>
+      <td><strong>What is the traffic density in Nou Barri...</strong></td>
+      <td><code>52.84</code></td>
+      <td style="font-size: 10px;">sensor: BCN-TR-001 | traffic_density: 52.84 | Location: 41.38, 2.19</td>
+      <td class="match-1">1</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-TR-001 | traffic_density: 52.84 | Location: 41.38, 2.19</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>23</td>
+      <td><strong>What is the traffic density in Gràcia?</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Fundació Privada Festa Major de Gràcia | name: Fundació Privada Festa Major de Gràcia, created: 2004-06-18T13:43:05+02:00, addresses_r...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">ClimateShelter: Fundació Privada Festa Major de Gràcia | name: Fundació Privada Festa Major de Gràcia, created: 2004-06-18T13:43:05+02:00, addresses_r...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>24</td>
+      <td><strong>What is the traffic density in Sant Andr...</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Centre Cívic Sant Andreu | name: Centre Cívic Sant Andreu, created: 1984-05-30T00:00:00+02:00, addresses_road_id: 296202, addresses_ro...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">ClimateShelter: Centre Cívic Sant Andreu | name: Centre Cívic Sant Andreu, created: 1984-05-30T00:00:00+02:00, addresses_road_id: 296202, addresses_ro...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>25</td>
+      <td><strong>What is the traffic density near Plaça E...</strong></td>
+      <td><code>52.84</code></td>
+      <td style="font-size: 10px;">sensor: BCN-TR-001 | traffic_density: 52.84 | Location: 41.38, 2.19</td>
+      <td class="match-1">1</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-TR-001 | traffic_density: 52.84 | Location: 41.38, 2.19</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>26</td>
+      <td><strong>What is the bin fill level in Ciutat Vel...</strong></td>
+      <td><code>0001156</code></td>
+      <td style="font-size: 10px;">sensor: BCN-WB-001 | bin_fill: 36.75 | Location: 41.38, 2.19</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">Tree: 0001156AR | x_etrs89: 430513.665, y_etrs89: 4587413.271, tipus_element: ARBRE VIARI, espai_verd: Central de Nou Barris, Parc, adreca: Pl César V...</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>27</td>
+      <td><strong>What is the bin fill level in Gràcia?</strong></td>
+      <td><code>74.55</code></td>
+      <td style="font-size: 10px;">sensor: BCN-WB-001 | bin_fill: 36.75 | Location: 41.38, 2.19</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-WB-001 | bin_fill: 36.75 | Location: 41.38, 2.19</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>28</td>
+      <td><strong>What is the bin fill level in Sarrià?</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">Tree: 0007301AR | x_etrs89: 427672.283, y_etrs89: 4582634.288, tipus_element: ARBRE VIARI, espai_verd: Sarrià, Av. - Bori i Fonestà, c. - Can Ràbia, c...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">Tree: 0007301AR | x_etrs89: 427672.283, y_etrs89: 4582634.288, tipus_element: ARBRE VIARI, espai_verd: Sarrià, Av. - Bori i Fonestà, c. - Can Ràbia, c...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>29</td>
+      <td><strong>What is the bin fill level in Eixample?</strong></td>
+      <td><code>74.55</code></td>
+      <td style="font-size: 10px;">sensor: BCN-WB-001 | bin_fill: 36.75 | Location: 41.38, 2.19</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-WB-001 | bin_fill: 36.75 | Location: 41.38, 2.19</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>30</td>
+      <td><strong>What is the bin fill level in Nou Barris...</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">Tree: 0001156AR | x_etrs89: 430513.665, y_etrs89: 4587413.271, tipus_element: ARBRE VIARI, espai_verd: Central de Nou Barris, Parc, adreca: Pl César V...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">Tree: 0001156AR | x_etrs89: 430513.665, y_etrs89: 4587413.271, tipus_element: ARBRE VIARI, espai_verd: Central de Nou Barris, Parc, adreca: Pl César V...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>31</td>
+      <td><strong>What tree species are planted near the c...</strong></td>
+      <td><code>Gleditsia triacanthos f. inermis</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Centre Cívic Sant Andreu | name: Centre Cívic Sant Andreu, created: 1984-05-30T00:00:00+02:00, addresses_road_id: 296202, addresses_ro...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">Tree: 0015929AR | x_etrs89: 428901.151, y_etrs89: 4587848.228, tipus_element: ARBRE VIARI, espai_verd: Germans Desvalls, c. (Aparcaments), adreca: Pg ...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>32</td>
+      <td><strong>Where can I find a Pinus pinea in Barcel...</strong></td>
+      <td><code>423</code></td>
+      <td style="font-size: 10px;">Tree: 0000423AR | x_etrs89: 430250.886, y_etrs89: 4587703.209, tipus_element: ARBRE VIARI, espai_verd: Central de Nou Barris, Parc, adreca: Pg Fabra i...</td>
+      <td class="match-1">1</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">Tree: 0000423AR | x_etrs89: 430250.886, y_etrs89: 4587703.209, tipus_element: ARBRE VIARI, espai_verd: Central de Nou Barris, Parc, adreca: Pg Fabra i...</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>33</td>
+      <td><strong>What is the address of the nearest green...</strong></td>
+      <td><code>3</code></td>
+      <td style="font-size: 10px;">GreenPoint: Punt Verd de Barri - Barceloneta | name: Punt Verd de Barri - Barceloneta, created: 2013-04-11T14:52:45+02:00, addresses_road_id: 294874, ...</td>
+      <td class="match-1">1</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">GreenPoint: Punt Verd de Barri - Barceloneta | name: Punt Verd de Barri - Barceloneta, created: 2013-04-11T14:52:45+02:00, addresses_road_id: 294874, ...</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>34</td>
+      <td><strong>What trees are near the climate shelter ...</strong></td>
+      <td><code>18</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Oficina Comercial | name: Oficina Comercial, institution_id: 75990369532, created: 1998-07-03T00:00:00+02:00, addresses_road_id: 16940...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">Tree: 0015780AR | x_etrs89: 428957.606, y_etrs89: 4587904.401, tipus_element: ARBRE VIARI, espai_verd: Germans Desvalls, c. (Aparcaments), adreca: Pg ...</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>35</td>
+      <td><strong>What trees are near the green point in N...</strong></td>
+      <td><code>0001116</code></td>
+      <td style="font-size: 10px;">Tree: 0001116AR | x_etrs89: 430205.681, y_etrs89: 4587561.042, tipus_element: ARBRE VIARI, espai_verd: Central de Nou Barris, Parc, adreca: Pg Fabra i...</td>
+      <td class="match-1">1</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">Tree: 0001116AR | x_etrs89: 430205.681, y_etrs89: 4587561.042, tipus_element: ARBRE VIARI, espai_verd: Central de Nou Barris, Parc, adreca: Pg Fabra i...</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>36</td>
+      <td><strong>Which AQI reading should I trust in Eixa...</strong></td>
+      <td><code>75</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-001 | AQI: 75.18 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 75.05 | Location: 41.389, 2.165</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>37</td>
+      <td><strong>Is the AQI reading from sensor BCN-AQ-99...</strong></td>
+      <td><code>not consistent</code></td>
+      <td style="font-size: 10px;">sensor: BCN-AQ-999 | AQI: 999 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-AQ-001 | AQI: 75.05 | Location: 41.389, 2.165</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>38</td>
+      <td><strong>What is the temperature near the green p...</strong></td>
+      <td><code>68.54</code></td>
+      <td style="font-size: 10px;">sensor: BCN-WE-001 | temperature: 77.92 | Location: 41.44, 2.181</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-WE-001 | temperature: 68.54 | Location: 41.44, 2.181</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+    <tr>
+      <td>39</td>
+      <td><strong>What is the latest citizen report about ...</strong></td>
+      <td><code>nan</code></td>
+      <td style="font-size: 10px;">ClimateShelter: Centre Informació | name: Centre Informació, institution_id: 92086029622, created: 1990-11-22T00:00:00+01:00, addresses_road_id: 16000...</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">ClimateShelter: Centre Informació | name: Centre Informació, institution_id: 92086029622, created: 1990-11-22T00:00:00+01:00, addresses_road_id: 16000...</td>
+      <td class="match-0">0</td>
+    </tr>
+    
+    <tr>
+      <td>40</td>
+      <td><strong>Which temperature reading should I trust...</strong></td>
+      <td><code>45.6</code></td>
+      <td style="font-size: 10px;">sensor: BCN-WE-001 | temperature: 76.91 | Location: 41.44, 2.181</td>
+      <td class="match-0">0</td>
+      <td style="font-size: 10px; background-color: #e8f4f8;">sensor: BCN-WE-001 | temperature: 45.61 | Location: 41.44, 2.181</td>
+      <td class="match-1">1</td>
+    </tr>
+    
+  </tbody>
+</table>
+<p><strong>Legend:</strong> <span class="match-1">1 (Green)</span> = Match found; <span class="match-0">0 (Red)</span> = No match.</p>
+<p><em>Note: The TRS context column is highlighted in light blue.</em></p>
+</body>
+</html>
